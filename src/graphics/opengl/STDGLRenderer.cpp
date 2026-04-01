@@ -21,6 +21,12 @@ std::shared_ptr<Renderer> STDGLRenderer::Make() {
 
     tempRendererRef->selfRef = std::static_pointer_cast<Renderer>(tempRendererRef);
 
+    tempRendererRef->Init();
+
+    return tempRendererRef;
+}
+
+void STDGLRenderer::Init() {
     glfwDefaultWindowHints();
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -33,13 +39,11 @@ std::shared_ptr<Renderer> STDGLRenderer::Make() {
 
     glfwSwapInterval(0);
 
-    tempRendererRef->rendererData = data;
+    rendererData = data;
 
-    tempRendererRef->ShaderSystem.Init();
+    ShaderSystem.Init();
 
-    tempRendererRef->ModelInstancePreprocessShader = 
-                    tempRendererRef->ShaderSystem.GetComputeShader("STDGLModel_InstancePreprocess");
-    return tempRendererRef;
+    ModelInstancePreprocessShader = ShaderSystem.GetComputeShader("STDGLModel_InstancePreprocess");
 }
 
 STDGLRenderer::~STDGLRenderer() {

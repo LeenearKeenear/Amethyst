@@ -30,6 +30,8 @@ protected:
     GLuint ModelInstancePreprocessShader;
 
     uint64_t FrameCounter = 0;
+
+    void Init();
     
 #endif
 public:
