@@ -12,7 +12,7 @@
 #include "GLMisc.h"
 #include "STDGLWindow.h"
 
-#include "../../src/shader.h"
+#include "../src/shader.h"
 
 std::shared_ptr<Renderer> STDGLRenderer::Make() {
     GLMisc::EnsureGLLoaded();
@@ -64,12 +64,12 @@ void STDGLRenderer::Draw() {
         glDeleteSync(DoubleBufferFences[isFrameOdd]);
     }
 
+    Shader tmpshader = Shader("scripts/shaders/opengl/generic.vs", "scripts/shaders/opengl/generic.fs");
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glClearDepth(1.0f);
     glClearColor(0, 0, 0, 1);
-
-    Shader tmpshader = Shader("scripts/shaders/opengl/generic.vs", "scripts/shaders/opengl/generic.fs");
 
     auto SharedRWorldVec = RWorldVec.lock();
     for (auto& rworldbase : SharedRWorldVec) {
@@ -100,7 +100,7 @@ void STDGLRenderer::Draw() {
                 glDispatchCompute(STDGLMODEL_INSTANCE_MAX_COUNT / STDGLMODEL_INSTANCE_PREPROCESS_GROUP_SIZE, 1, 1);
             }
 
-            glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+            glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_COMMAND_BARRIER_BIT);
 
             for (auto& iarray : SharedInstanceArraysVec) {
                 iarray->Bind();
@@ -128,7 +128,7 @@ void STDGLRenderer::Draw() {
         window->Draw();
     }
 
-    DoubleBufferFences[isFrameOdd] = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    //DoubleBufferFences[isFrameOdd] = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
     
 }
 
