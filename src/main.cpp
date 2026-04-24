@@ -1,4 +1,6 @@
-#undef AMETHYSTENGINESRC
+#ifndef _WIN32
+	#undef AMETHYSTENGINESRC
+#endif
 
 #include <array>
 #include <bit>

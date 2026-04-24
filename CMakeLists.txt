@@ -77,6 +77,5 @@ endif()
 
 if(WIN32)
 	set_target_properties(amethyst PROPERTIES ENABLE_EXPORTS ON)
-    target_link_options(amethyst PUBLIC "-Wl,--out-implib,${CMAKE_CURRENT_BINARY_DIR}/amethyst.exe.a")
-	set_target_properties(amethyst PROPERTIES IMPORT_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/amethyst.exe.a")
+    target_link_options(amethyst PUBLIC "-Wl,--out-implib,${CMAKE_CURRENT_BINARY_DIR}/libamethyst.dll.a")
 endif()
