@@ -125,7 +125,7 @@ std::unique_ptr<ModelInstance> STDGLModelInstanceArray::MakeModelInstance() {
         FreedIndeces.pop();
     }
     if (index >= STDGLMODEL_INSTANCE_MAX_COUNT)
-        exit(-1);
+        Engine::Error("Attempted to create more than STDGLMODEL_INSTANCE_MAX_COUNT instances of the same model!");
     return std::make_unique<STDGLModelInstance>(index, selfRef.lock());
 }
 

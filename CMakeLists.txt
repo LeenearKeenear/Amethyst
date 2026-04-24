@@ -44,6 +44,8 @@ endif()
 add_executable(amethyst
 	src/main.cpp
 	
+	src/EngineMisc.cpp
+	src/graphics/Rendering.cpp
 	src/graphics/opengl/STDGLRenderer.cpp
 	src/graphics/opengl/STDGLCamera.cpp
 	src/graphics/opengl/STDGLRWorld.cpp
@@ -52,6 +54,7 @@ add_executable(amethyst
 	src/graphics/opengl/STDGLShaderSystem.cpp
 	src/graphics/opengl/GLMisc.cpp
 	src/geometry/Model.cpp
+	src/Init.cpp
 	)
 
 target_link_libraries(amethyst glad)

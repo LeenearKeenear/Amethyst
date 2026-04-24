@@ -13,8 +13,7 @@ namespace Filesystem {
     inline VdfParser::KeyValue GetDataFile(const std::string& name) {
         std::ifstream file(name);
         if (!file.is_open()) {
-            std::cerr << "Error opening file: " << name << std::endl;
-            exit(-1);
+            Engine::Error("Error opening file: " + name);
         }
 
         std::stringstream buffer;

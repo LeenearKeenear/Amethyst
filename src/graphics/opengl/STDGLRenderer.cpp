@@ -7,7 +7,7 @@
 #include "engine/graphics/RWorld.h"
 #include "engine/graphics/Renderer.h"
 #include "engine/graphics/Window.h"
-#include "engine/graphics/opengl/STDGLRenderer.h"
+#include "STDGLRenderer.h"
 #include "STDGLRWorld.h"
 #include "GLMisc.h"
 #include "STDGLWindow.h"

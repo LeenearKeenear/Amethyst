@@ -10,9 +10,8 @@ void GLMisc::EnsureGLLoaded() {
 	auto temp = glfwCreateWindow(1, 1, "a", NULL, NULL);
 	glfwMakeContextCurrent(temp);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << "Failed to initialize GLAD" << std::endl;
 		glfwTerminate();
-		exit(-1);
+		Engine::Error("Failed to initialize GLAD");
 	}
 	glfwMakeContextCurrent(NULL);
 	glfwDestroyWindow(temp);

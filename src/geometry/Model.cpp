@@ -26,8 +26,7 @@ Geometry::Model::Model(std::string path) {
         scene = importer.ReadFileFromMemory(buffer.data(), buffer.size(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_PreTransformVertices | aiProcess_OptimizeMeshes, path.c_str());
 
         if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) { // if is Not Zero
-            std::cout << "Error loading the error model: " << importer.GetErrorString() << std::endl;
-            exit(-1);
+            Engine::Error(std::string("Error loading the error model: ") + importer.GetErrorString());
         }
     }
     

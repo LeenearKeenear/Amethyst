@@ -11,7 +11,7 @@
 #include "engine/Filesystem.h"
 
 #include "main.h"
-#include "engine/graphics/opengl/STDGLRenderer.h"
+#include "Init.h"
 
 #include <iostream>
 #include <memory>
@@ -105,11 +105,9 @@ std::function<void(Renderer*, Window*)> mainuifunction = [](Renderer* renderer, 
 };
 
 int main() {
-	glfwInit();
+	Engine::Init();
 
-	std::atexit(&exitfunc);
-
-	std::shared_ptr openglrenderer = STDGLRenderer::Make();
+	std::shared_ptr<Renderer> openglrenderer = Renderer::Make("STDGLRenderer");
 	std::shared_ptr<Window> enginewindow = openglrenderer->MakeWindow();
 	enginewindow->Name = "Amethyst";
 	enginewindow->Update();
@@ -160,8 +158,4 @@ int main() {
 
 	for(auto& model : models) model.reset();
 	for(auto& model : extramodels) model.reset();
-}
-
-void exitfunc() {
-	glfwTerminate();
 }

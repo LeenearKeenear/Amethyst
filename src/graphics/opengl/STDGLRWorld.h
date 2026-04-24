@@ -3,7 +3,7 @@
 #include "STDGLCamera.h"
 #include "engine/graphics/ModelInstance.h"
 #include "engine/graphics/RWorld.h"
-#include "engine/graphics/opengl/STDGLRenderer.h"
+#include "STDGLRenderer.h"
 #include <memory>
 #include <vector>
 #include "STDGLModel.h"

@@ -7,17 +7,14 @@
 #include <vector>
 #include <cstdint>
 #include "engine/weak_vector.h"
-#ifdef AMETHYSTENGINESRC
-    #include "../src/graphics/opengl/STDGLWindow.h"
-    #include "../src/graphics/opengl/STDGLModel.h"
-    #include "../src/graphics/opengl/STDGLShaderSystem.h"
-#endif
+#include "STDGLWindow.h"
+#include "STDGLModel.h"
+#include "STDGLShaderSystem.h"
 
 /*!
 *   \brief An OpenGL renderer.
 */
-class ENGINEEXPORT STDGLRenderer : public Renderer {
-#ifdef AMETHYSTENGINESRC
+class STDGLRenderer : public Renderer {
 protected:
     GLFWwindow* rendererData = nullptr;
     weak_vector<RWorld> RWorldVec;
@@ -34,11 +31,8 @@ protected:
     uint64_t FrameCounter = 0;
 
     void Init();
-    
-#endif
 public:
     ~STDGLRenderer();
-    //!Makes the renderer
     static std::shared_ptr<Renderer> Make();
     std::shared_ptr<RWorld> MakeRWorld();
     Camera* GetCamera(std::string name);

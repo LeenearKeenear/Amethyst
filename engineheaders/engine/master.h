@@ -2,6 +2,7 @@
 #include <cmath>
 #include <array>
 #include <cstdint>
+#include <string>
 //#include <glm/glm.hpp> // For error highlighting
 
 #ifdef GLMPresent 
@@ -23,7 +24,8 @@
 
 
 namespace Engine {
-    
+    void ENGINEEXPORT Warning(std::string text);
+    void ENGINEEXPORT Error(std::string text);
 }
 
 struct alignas(sizeof(float) * 4) vec3 {

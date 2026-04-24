@@ -1,5 +1,6 @@
 #include "STDGLShaderSystem.h"
 #include "Shadinclude.hpp"
+#include "engine/master.h"
 
 void STDGLShaderSystem::InitCompute(VdfParser::KeyValue Shaderdefs) {
     if (!Shaderdefs.getChildren().has_value()) return;
@@ -25,7 +26,7 @@ void STDGLShaderSystem::InitCompute(VdfParser::KeyValue Shaderdefs) {
         if (!success) {
             glGetShaderInfoLog(computeShader, 512, NULL, infoLog);
             std::cout << infoLog << std::endl;
-            exit(-1);
+            Engine::Warning("Compute shader compilation error! Log printed to std::cout");
         }
 
         GLuint computeProgram = glCreateProgram();
@@ -36,7 +37,7 @@ void STDGLShaderSystem::InitCompute(VdfParser::KeyValue Shaderdefs) {
         if (!success) {
             glGetProgramInfoLog(computeProgram, 512, NULL, infoLog);
             std::cout << infoLog << std::endl;
-            exit(-1);
+            Engine::Warning("Compute shader program linking error! Log printed to std::cout");
         }
 
         ComputeShaders.emplace(shader.first, computeProgram);

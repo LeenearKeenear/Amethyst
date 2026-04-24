@@ -34,6 +34,13 @@ public:
     virtual const uint64_t& GetFrameCounter() = 0;
     //! Draws everything.
     virtual void Draw() = 0;
+
+    static std::shared_ptr<Renderer> Make(std::string classname);
+
+#ifdef AMETHYSTENGINESRC
+    static void AddRenderer(const std::string classname, std::shared_ptr<Renderer> (*makefunc)() );
+#endif
+
 };
 
 
