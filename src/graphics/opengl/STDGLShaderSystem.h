@@ -7,7 +7,7 @@
 
 class STDGLShaderSystem {
     std::unordered_map<std::string, GLuint> ComputeShaders;
-    void InitCompute(const ADFObject& Shaderdefs);
+    void InitCompute(const ADFEntry& Shaderdefs);
 public:
     void Init();
 

@@ -131,7 +131,7 @@ int main() {
 
 	std::cout << "Hello, world!" << std::endl;
 
-	auto datafilething = ADFObject::FromFile("scripts/shaders/glshaders.adf");
+	auto datafilething = ADFEntry::FromFile("scripts/shaders/glshaders.adf");
 
 	while(EngineShouldNotTerminate) {
 		float currentFrame = static_cast<float>(glfwGetTime());

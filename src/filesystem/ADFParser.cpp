@@ -2,7 +2,7 @@
 #include "engine/ADF.h"
 #include <cctype>
 
-ADFObject::Token ADFObject::Tokenizer::ReadToken() {
+ADFEntry::Token ADFEntry::Tokenizer::ReadToken() {
     char currchar;
     std::string TokenContent;
 
@@ -26,13 +26,15 @@ ADFObject::Token ADFObject::Tokenizer::ReadToken() {
 
         return Token(TokenType::String, TokenContent);
     case '{':
-        return Token(TokenType::StartObject);
+        return Token(TokenType::StartMap);
     case '[':
         return Token(TokenType::StartArray);
     case '}':
+        return Token(TokenType::EndMap);
     case ']':
+        return Token(TokenType::EndArray);
     case -1:
-        return Token(TokenType::End);
+        return Token(TokenType::EndFile);
     }
 
     // Unquoted string
@@ -53,66 +55,75 @@ ADFObject::Token ADFObject::Tokenizer::ReadToken() {
     return Token();
 }
 
-ADFObject::ADFObject(ADFType Type, Tokenizer& Tokenizer) {
+ADFEntry::ADFEntry(ADFType Type, Tokenizer& Tokenizer) {
     switch (Type) {
     
     case ADFType::map: {
-        data = std::map<std::string, ADFObject>();
-        std::map<std::string, ADFObject>& mapdata = std::get<std::map<std::string, ADFObject>>(data);
+        data = std::map<std::string, ADFEntry>();
+        std::map<std::string, ADFEntry>& mapdata = std::get<std::map<std::string, ADFEntry>>(data);
 
         while (true) {
-            Token Token = Tokenizer.ReadToken();
+            Token KeyToken = Tokenizer.ReadToken();
             std::string key;
 
-            switch (Token.type) {
+            switch (KeyToken.type) {
             case TokenType::String:
-                key = std::move(Token.content.value());
+                key = std::move(KeyToken.content.value());
                 break;
-            case TokenType::StartObject:
+            case TokenType::StartMap:
             case TokenType::StartArray:
                 Engine::Error("An ADF entry cannot be a key!");
-            case TokenType::End:
+            case TokenType::EndArray:
+                Engine::Error("Mismatched ADF closing brackets!(Tried to end a map with a square bracket)");
+            case TokenType::EndMap:
+            case TokenType::EndFile:
                 return;
             }
 
-            Token = Tokenizer.ReadToken();
+            Token EntryToken = Tokenizer.ReadToken();
 
-            switch (Token.type) {
+            switch (EntryToken.type) {
                 case TokenType::String:
-                    mapdata.emplace(std::move(key), ADFObject(Token.content.value()));
+                    mapdata.emplace(std::move(key), String(EntryToken.content.value()));
                 break;
-                case TokenType::StartObject:
-                    mapdata.emplace(std::move(key), ADFObject(ADFType::map, Tokenizer));
+                case TokenType::StartMap:
+                    mapdata.emplace(std::move(key), ADFEntry(ADFType::map, Tokenizer));
                 break;
                 case TokenType::StartArray:
-                    mapdata.emplace(std::move(key), ADFObject(ADFType::array, Tokenizer));
+                    mapdata.emplace(std::move(key), ADFEntry(ADFType::array, Tokenizer));
                 break;
-                case TokenType::End:
+                case TokenType::EndMap:
+                case TokenType::EndFile:
                     Engine::Error("Incomplete ADF key/value pair!");
+                case TokenType::EndArray:
+                    Engine::Error("Incomplete ADF key/value pair!(And also it was closed with a square bracket!)");
             }
         }
 
         return;
     }
     case ADFType::array: {
-        data = std::vector<ADFObject>();
-        std::vector<ADFObject>& arraydata = std::get<std::vector<ADFObject>>(data);
+        data = std::vector<ADFEntry>();
+        std::vector<ADFEntry>& arraydata = std::get<std::vector<ADFEntry>>(data);
 
         while (true) {
             Token Token = Tokenizer.ReadToken();
 
             switch (Token.type) {
                 case TokenType::String:
-                    arraydata.emplace_back(ADFObject(Token.content.value()));
+                    arraydata.emplace_back(String(Token.content.value()));
                 break;
-                case TokenType::StartObject:
-                    arraydata.emplace_back(ADFObject(ADFType::map, Tokenizer));
+                case TokenType::StartMap:
+                    arraydata.emplace_back(ADFEntry(ADFType::map, Tokenizer));
                 break;
                 case TokenType::StartArray:
-                    arraydata.emplace_back(ADFObject(ADFType::array, Tokenizer));
+                    arraydata.emplace_back(ADFEntry(ADFType::array, Tokenizer));
                 break;
-                case TokenType::End:
+                case TokenType::EndArray:
+                case TokenType::EndFile:
                     return;
+                case TokenType::EndMap:
+                    Engine::Error("Mismatched ADF closing brackets!(Tried to end an array with a curly brace)");
             }
         }
 
@@ -122,7 +133,7 @@ ADFObject::ADFObject(ADFType Type, Tokenizer& Tokenizer) {
     }
 }
 
-ENGINEEXPORT ADFObject ADFObject::FromFile(std::string FilePath) {
+ENGINEEXPORT ADFEntry ADFEntry::FromFile(std::string FilePath) {
     Tokenizer Tokenizer(FilePath);
-    return ADFObject(ADFType::map, Tokenizer);
+    return ADFEntry(ADFType::map, Tokenizer);
 }

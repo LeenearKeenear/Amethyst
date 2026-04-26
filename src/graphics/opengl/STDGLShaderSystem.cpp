@@ -2,7 +2,7 @@
 #include "Shadinclude.hpp"
 #include "engine/master.h"
 
-void STDGLShaderSystem::InitCompute(const ADFObject& Shaderdefs) {
+void STDGLShaderSystem::InitCompute(const ADFEntry& Shaderdefs) {
     const auto& ShaderDefList = Shaderdefs.GetChildren();
     if (ShaderDefList.empty()) return;
 
@@ -50,7 +50,7 @@ void STDGLShaderSystem::InitCompute(const ADFObject& Shaderdefs) {
 
 
 void STDGLShaderSystem::Init() {
-    auto glshadersadf = ADFObject::FromFile("scripts/shaders/glshaders.adf")["Shaders"];
+    auto glshadersadf = ADFEntry::FromFile("scripts/shaders/glshaders.adf")["Shaders"];
 
     auto ComputeShaderDefs = glshadersadf["Compute"];
     InitCompute(ComputeShaderDefs);
