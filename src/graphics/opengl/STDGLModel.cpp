@@ -8,7 +8,19 @@ STDGLModel::STDGLModel(std::string path = "") {
     ModelInfo_t Info;
     auto ModelADF = ADFEntry::FromFile("models/" + path);
 
+    if (!ModelADF.HasChildren()) {
+        new (this) STDGLModel("error.adf");
+        return;
+    }
+
     LODCount = std::min((int)ModelADF["LODs"].GetArray().size(), STDGLMODEL_LOD_MAX_COUNT);
+
+    if (LODCount < 1) {
+        new (this) STDGLModel("error.adf");
+        return;
+    }
+
+
 
     std::array<Geometry::Model, STDGLMODEL_LOD_MAX_COUNT> LODModels;
 

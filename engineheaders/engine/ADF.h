@@ -127,11 +127,11 @@ public:
     }
 
     inline bool HasChildren() const {
-        return GetChildren().empty();
+        return !GetChildren().empty();
     }
 
     inline bool HasElements() const {
-        return GetArray().empty();
+        return !GetArray().empty();
     }
 
 };
