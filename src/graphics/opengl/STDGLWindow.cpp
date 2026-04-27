@@ -93,7 +93,7 @@ void STDGLWindow::Draw() {
     if (UIFunction) {
         UIFunction(rendererRef.get(), this);
     } else {
-        exit(-2);
+        Engine::Error("A window was drawn without a UI function!");
     }
 
     ImGui::Render();
