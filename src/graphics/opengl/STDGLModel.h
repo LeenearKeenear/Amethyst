@@ -42,20 +42,20 @@ public:
     };
     struct LOD {
         uint8_t MeshCount;
-        Mesh Meshes[STDGLMODEL_MESH_MAX_COUNT];
+        std::array<Mesh, STDGLMODEL_MESH_MAX_COUNT> Meshes;
     };
     struct ModelInfo_t {
-        DrawElementsIndirectCommand IndirectBuffers[STDGLMODEL_LOD_MAX_COUNT][STDGLMODEL_MESH_MAX_COUNT]; 
+        std::array<std::array<DrawElementsIndirectCommand, STDGLMODEL_MESH_MAX_COUNT>, STDGLMODEL_LOD_MAX_COUNT> IndirectBuffers; 
         float Radius = 0.0f;
-        float LODDistances[STDGLMODEL_LOD_MAX_COUNT];
-        GLuint InstanceIndices[STDGLMODEL_LOD_MAX_COUNT][STDGLMODEL_INSTANCE_MAX_COUNT];
+        std::array<float, STDGLMODEL_LOD_MAX_COUNT> LODDistances;
+        std::array<std::array<GLuint, STDGLMODEL_INSTANCE_MAX_COUNT>, STDGLMODEL_LOD_MAX_COUNT> InstanceIndices;
     };
 
     STDGLModel(std::string path = "error.adf");
     ~STDGLModel();
 
     uint8_t LODCount;
-    LOD LODs[STDGLMODEL_LOD_MAX_COUNT];
+    std::array<LOD, STDGLMODEL_LOD_MAX_COUNT> LODs;
     std::string Path;
     GLuint VAO;
     GLuint VBO, EBO, ModelInfo;
@@ -64,7 +64,7 @@ public:
 class STDGLModelInstanceArray {
 public:
     struct InstanceArrayBuffer {
-        mat4 InstanceMatrices[STDGLMODEL_INSTANCE_MAX_COUNT];
+        std::array<mat4, STDGLMODEL_INSTANCE_MAX_COUNT> InstanceMatrices;
     };
 
     GLFWwindow* rendererData;

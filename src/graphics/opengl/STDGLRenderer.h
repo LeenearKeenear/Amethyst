@@ -22,7 +22,7 @@ protected:
     STDGLModelSystem ModelSystem;
     STDGLShaderSystem ShaderSystem;
 
-    GLsync DoubleBufferFences[2] = { nullptr, nullptr };
+    std::array<GLsync, 2> DoubleBufferFences = { nullptr, nullptr };
 
     GLuint ModelInstanceBlankerShader;
     GLuint ModelInstancePreprocessShader;
