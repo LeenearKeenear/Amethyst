@@ -1,6 +1,10 @@
 #version 460 core
 
 layout (location = 0) in vec3 aPos;
+out gl_PerVertex {
+    vec4 gl_Position;
+    float gl_PointSize;
+};
 
 
 layout (std140, binding = 0) uniform Camera {

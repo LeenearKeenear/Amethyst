@@ -1,4 +1,4 @@
-//movercell: File has been modified to use Amethyst's Filesystem::GetFile
+//movercell: File has been modified to use Amethyst's Filesystem::GetFile and Engine::Warning
 
 #pragma once
 
@@ -80,7 +80,7 @@ public:
 
 		if (!file.is_open())
 		{
-			std::cerr << "ERROR: could not open the shader at: " << path << "\n" << std::endl;
+			Engine::Warning("ERROR: Could not open the shader at: " + path);
 			return fullSourceCode;
 		}
 

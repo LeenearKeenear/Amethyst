@@ -70,7 +70,7 @@ void STDGLRenderer::Draw() {
         glDeleteSync(DoubleBufferFences[isFrameOdd]);
     }
 
-    Shader tmpshader = Shader("scripts/shaders/opengl/generic.vs", "scripts/shaders/opengl/generic.fs");
+    auto tmpshader = ShaderSystem.GetShaderPipeline("Generic", "UnlitGeneric").first;
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -98,36 +98,37 @@ void STDGLRenderer::Draw() {
             glViewport(0, 0, camera->GetResolution().x, camera->GetResolution().y);
             glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
             
+            glUseProgram(ModelInstanceBlankerShader);
             for (auto& iarray : SharedInstanceArraysVec) {
                 iarray->Model->BindInfo();
-                glUseProgram(ModelInstanceBlankerShader);
                 glDispatchCompute(1, 1, 1);
             }
 
             glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
+            glUseProgram(ModelInstancePreprocessShader);
             for (auto& iarray : SharedInstanceArraysVec) {
                 iarray->Bind();
                 iarray->Model->BindInfo();
-                glUseProgram(ModelInstancePreprocessShader);
                 glDispatchCompute(STDGLMODEL_INSTANCE_MAX_COUNT / STDGLMODEL_INSTANCE_PREPROCESS_GROUP_SIZE, 1, 1);
             }
 
             glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
+            glUseProgram(ModelInstanceReplicatorShader);
             for (auto& iarray : SharedInstanceArraysVec) {
                 iarray->Model->BindInfo();
-                glUseProgram(ModelInstanceReplicatorShader);
                 glDispatchCompute(1, 1, 1);
             }
 
             glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_COMMAND_BARRIER_BIT);
 
+            glUseProgram(0);
+            glBindProgramPipeline(tmpshader);
             for (auto& iarray : SharedInstanceArraysVec) {
                 iarray->Bind();
                 iarray->Model->BindInfo();
                 iarray->Model->BindIndirectCommands();
-                tmpshader.use();
 
                 iarray->Model->Draw();
             }
