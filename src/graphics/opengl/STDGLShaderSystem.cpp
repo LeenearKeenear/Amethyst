@@ -67,9 +67,9 @@ void STDGLShaderSystem::InitGraphic(const ADFEntry& ShaderDefs) {
 
         int success;
         char infoLog[512];
-        glGetShaderiv(vertexShader, GL_LINK_STATUS, &success);
+        glGetProgramiv(vertexShader, GL_LINK_STATUS, &success);
         if (!success) {
-            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+            glGetProgramInfoLog(vertexShader, 512, NULL, infoLog);
             std::cout << infoLog << std::endl;
             Engine::Warning("Vertex shader compilation error! Log printed to std::cout");
             glDeleteShader(vertexShader);
@@ -101,9 +101,9 @@ void STDGLShaderSystem::InitGraphic(const ADFEntry& ShaderDefs) {
 
             int success;
             char infoLog[512];
-            glGetShaderiv(fragmentShader, GL_LINK_STATUS, &success);
+            glGetProgramiv(fragmentShader, GL_LINK_STATUS, &success);
             if (!success) {
-                glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+                glGetProgramInfoLog(fragmentShader, 512, NULL, infoLog);
                 std::cout << infoLog << std::endl;
                 Engine::Warning("Fragment shader compilation error! Log printed to std::cout");
                 glDeleteShader(fragmentShader);
@@ -129,9 +129,9 @@ void STDGLShaderSystem::InitGraphic(const ADFEntry& ShaderDefs) {
 
             int success;
             char infoLog[512];
-            glGetShaderiv(depthShader, GL_LINK_STATUS, &success);
+            glGetProgramiv(depthShader, GL_LINK_STATUS, &success);
             if (!success) {
-                glGetShaderInfoLog(depthShader, 512, NULL, infoLog);
+                glGetProgramInfoLog(depthShader, 512, NULL, infoLog);
                 std::cout << infoLog << std::endl;
                 Engine::Warning("Depth shader compilation error! Log printed to std::cout");
                 glDeleteShader(depthShader);
