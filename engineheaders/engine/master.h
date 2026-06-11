@@ -312,10 +312,10 @@ struct alignas(sizeof(float) * 4) quat {
         );
     }
     quat& operator*=(const quat& other) {
-        x = w * other.x - x * other.w - y * other.z + z * other.y;
-        y = w * other.y + x * other.z - y * other.w - z * other.x;
-        z = w * other.z - x * other.y + y * other.x - z * other.w;
-        w = w * other.w + x * other.x + y * other.y + z * other.z;
+        *this = quat(w * other.x - x * other.w - y * other.z + z * other.y,
+                     w * other.y + x * other.z - y * other.w - z * other.x,
+                     w * other.z - x * other.y + y * other.x - z * other.w,
+                     w * other.w + x * other.x + y * other.y + z * other.z);
         
         return *this;
     }
